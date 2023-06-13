@@ -1,9 +1,11 @@
 import { client } from "@/lib/sanityClients";
 import imageUrlBuilder from "@sanity/image-url";
 import Image from "next/image";
+import AddCart from "./AddCart";
+import { SanityProductDetail } from "@/type";
 
 export async function generateStaticParams() {
-  const response = await client.fetch(
+  const response: [_id: string] = await client.fetch(
     `*[_type=="product" && category=="male"]{_id}`
   );
 
@@ -20,10 +22,16 @@ const Product = async ({ params }: { params: { product: string } }) => {
   }
 
   async function getData() {
-    const response = await client.fetch(
-      `*[_type=="product" && _id=="${params.product}" ][0]`
+    const response: SanityProductDetail = await client.fetch(
+      `*[_type=="product" && _id=="${params.product}" ]{
+        _id,
+        images,
+        title,
+        price,
+        type,
+        description
+      }[0]`
     );
-    console.log(response);
     return response;
   }
 
@@ -41,17 +49,17 @@ const Product = async ({ params }: { params: { product: string } }) => {
         <div className="flex-col space-y-4 py-4">
           <h1 className="text-xl font-bold">{data.title}</h1>
           <p className="font-bold text-gray-400">{data.type}</p>
-          <label className="font-bold">Quantity</label>
 
+          {/* Quantity */}
+          <label className="font-bold">Quantity</label>
           <br />
           <div className="flex space-x-2 justify-start ">
-            <button className="px-4 py-2 bg-black text-white">
-              Add to Cart
-            </button>
+            <AddCart id={data._id} />
             <h2 className="text-xl font-bold self-center">${data.price}</h2>
           </div>
         </div>
       </div>
+
       {/* Product Information */}
       <div className="w-[70%] m-auto mt-36">
         <h1 className="font-bold text-lg mb-10">Product Information</h1>

@@ -1,7 +1,7 @@
 import Navbar from "@/components/Navbar";
 import "./globals.css";
 import { Sora } from "next/font/google";
-
+import StateProvider from "@/components/State";
 const inter = Sora({ subsets: ["latin"] });
 
 export const metadata = {
@@ -17,8 +17,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Navbar />
-        {children}
+        <StateProvider>
+          <Navbar />
+          {children}
+        </StateProvider>
       </body>
     </html>
   );

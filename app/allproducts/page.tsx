@@ -2,9 +2,16 @@ import { client } from "../../lib/sanityClients";
 import imageUrlBuilder from "@sanity/image-url";
 import Link from "next/link";
 import Image from "next/image";
+import { SanityProducts } from "@/type";
 
 export const getProdData = async () => {
-  const res = await client.fetch(`*[_type=="product"]`);
+  const res: SanityProducts[] = await client.fetch(`*[_type=="product"]{
+    _id,
+    images,
+    title,
+    type,
+    price
+  }`);
   return res;
 };
 
@@ -20,7 +27,7 @@ async function AllProducts() {
   return (
     <section className=" h-max w-full p-4  flex flex-wrap space-y-6 md:space-y-0 md:space-x-10 justify-center items-center ">
       {data &&
-        data.map((allprod: any) => (
+        data.map((allprod: SanityProducts) => (
           <div className="p-4">
             <Link href={allprod._id}>
               <Image
