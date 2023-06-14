@@ -87,7 +87,7 @@ const Navbar = () => {
         </button>
       </div>
       {openNav ? (
-        <div className="w-full flex flex-col items-center justify-evenly h-60">
+        <div className="w-full lg:hidden flex flex-col items-center justify-evenly h-60">
           <div className="flex-col justify-between list-none text-lg font-normal ">
             <Link href="/">
               <li>Home</li>

@@ -6,21 +6,28 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
 });
 
 export async function POST(req: any, res: NextResponse) {
-  const { item } = await req.json();
+  const request = await req.json();
 
-  const transformedItem = {
-    price_data: {
-      currency: "usd",
-      product_data: {
-        name: item.name,
-        description: item.description,
-        // images: [item.image],
-        metadata: { name: "some additional info", task: "Usm created a task" },
+  const transformeddata = request.map((t: any) => {
+    if (t.quantity < 1 || isNaN(t.quantity)) {
+      throw new Error(`Invalid quantity for item ${t.title}`);
+    }
+    return {
+      price_data: {
+        currency: "usd",
+        product_data: {
+          name: t.title,
+          description: t.type,
+          metadata: {
+            name: "some additional info",
+            task: "Usm created a task",
+          },
+        },
+        unit_amount: t.price * 100,
       },
-      unit_amount: item.price * 100,
-    },
-    quantity: item.quantity,
-  };
+      quantity: t.quantity,
+    };
+  });
 
   const redirectURL =
     process.env.NODE_ENV === "development"
@@ -29,14 +36,13 @@ export async function POST(req: any, res: NextResponse) {
 
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ["card"],
-    line_items: [transformedItem],
+    line_items: transformeddata,
     mode: "payment",
     success_url: redirectURL + "/payment/success",
     cancel_url: redirectURL + "/payment/fail",
     metadata: {
-      images: item.image,
       name: "some additional info",
-      task: "Usman created a task",
+      task: "ecommerce",
     },
   });
 

@@ -24,7 +24,6 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   const req = await request.json();
-  console.log(req);
   const uid = uuid();
   let cookieStore = cookies();
 

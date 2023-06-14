@@ -1,6 +1,6 @@
 "use client";
 import { CartContext } from "@/components/State";
-import React, { useState, useContext, useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 
 export const Button = ({ id, quantity, setquantity }: any) => {
   const { state, dispatch } = useContext(CartContext);
@@ -18,7 +18,7 @@ export const Button = ({ id, quantity, setquantity }: any) => {
 
   async function QuantityChange() {
     const res = await fetch("/api/quantity", {
-      method: "POST",
+      method: "PATCH",
       body: JSON.stringify({
         product_id: id,
         quantity: quantity,
@@ -37,8 +37,8 @@ export const Button = ({ id, quantity, setquantity }: any) => {
           quantity: quantity,
         },
       });
+      const res = await QuantityChange();
     }
-    const res = await QuantityChange();
   }
 
   return (
@@ -48,7 +48,7 @@ export const Button = ({ id, quantity, setquantity }: any) => {
           setquantity((prev: number) => prev - 1);
           changeQuantity();
         }}
-        disabled={quantity == 1}
+        disabled={quantity <= 1}
         className="border-[1px] border-gray-600 rounded-full h-7 w-7"
       >
         -

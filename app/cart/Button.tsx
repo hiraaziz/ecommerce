@@ -5,7 +5,7 @@ import Cookies from "universal-cookie";
 
 export const Button = ({ tquantity }: any) => {
   const { state, dispatch } = useContext(CartContext);
-  const [quantity, setquantity] = useState(0);
+  const [quantity, setquantity] = useState(1);
 
   useEffect(() => {
     changeQuantity();
@@ -18,6 +18,7 @@ export const Button = ({ tquantity }: any) => {
     if (product[0]) {
       setquantity(product[0].quantity);
     }
+
     setquantity(tquantity.quantity);
   }, []);
 
@@ -25,7 +26,7 @@ export const Button = ({ tquantity }: any) => {
     const cookies = new Cookies();
     const userId = cookies.get("user_id");
     const res = await fetch("/api/quantity", {
-      method: "POST",
+      method: "PATCH",
       body: JSON.stringify({
         product_id: tquantity.product_id,
         quantity: quantity,
@@ -60,7 +61,7 @@ export const Button = ({ tquantity }: any) => {
         onClick={() => {
           setquantity((prev: number) => prev - 1);
         }}
-        disabled={quantity == 1}
+        disabled={quantity <= 1}
         className="border-[1px] border-gray-600 rounded-full h-7 w-7"
       >
         -

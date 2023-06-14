@@ -34,6 +34,7 @@ const AddCart = ({ id }: any) => {
         },
       });
     } else toast.error("Item Added! Failed");
+    console.log(state);
   }
 
   return (

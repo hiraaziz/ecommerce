@@ -2,7 +2,7 @@ import { db, cartTable } from "@/lib/drizzle";
 import { NextRequest, NextResponse } from "next/server";
 import { InferModel, eq, sql, and } from "drizzle-orm";
 
-export async function POST(request: NextRequest) {
+export async function PATCH(request: NextRequest) {
   const req = await request.json();
 
   try {
