@@ -3,7 +3,7 @@ import { CartContext } from "@/components/State";
 import React, { useState, useContext, useEffect } from "react";
 import Cookies from "universal-cookie";
 
-export const Button = ({ tquantity }: any) => {
+export const Button = ({ product_id, product_quantity }: any) => {
   const { state, dispatch } = useContext(CartContext);
   const [quantity, setquantity] = useState(1);
 
@@ -12,14 +12,7 @@ export const Button = ({ tquantity }: any) => {
   }, [quantity]);
 
   useEffect(() => {
-    const product = state.filter(
-      (item: any) => tquantity.product_id == item.product_id
-    );
-    if (product[0]) {
-      setquantity(product[0].quantity);
-    }
-
-    setquantity(tquantity.quantity);
+    setquantity(product_quantity);
   }, []);
 
   async function QuantityChange() {
@@ -28,7 +21,7 @@ export const Button = ({ tquantity }: any) => {
     const res = await fetch("/api/quantity", {
       method: "PATCH",
       body: JSON.stringify({
-        product_id: tquantity.product_id,
+        product_id: product_id,
         quantity: quantity,
         userid: userId,
       }),
@@ -41,7 +34,7 @@ export const Button = ({ tquantity }: any) => {
     const res = await QuantityChange();
     if (res.status == 200) {
       const product = state.filter(
-        (item: any) => tquantity.product_id == item.product_id
+        (item: any) => product_id == item.product_id
       );
       if (product[0]?.product_id) {
         dispatch({

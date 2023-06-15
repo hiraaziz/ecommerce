@@ -1,6 +1,7 @@
 "use client";
 import { CartContext } from "@/components/State";
 import React, { useContext, useEffect } from "react";
+import Cookies from "universal-cookie";
 
 export const Button = ({ id, quantity, setquantity }: any) => {
   const { state, dispatch } = useContext(CartContext);
@@ -17,11 +18,14 @@ export const Button = ({ id, quantity, setquantity }: any) => {
   }, []);
 
   async function QuantityChange() {
+    const cookies = new Cookies();
+    const userId = cookies.get("user_id");
     const res = await fetch("/api/quantity", {
       method: "PATCH",
       body: JSON.stringify({
         product_id: id,
         quantity: quantity,
+        userid: userId,
       }),
     });
     return await res.json();
@@ -30,14 +34,19 @@ export const Button = ({ id, quantity, setquantity }: any) => {
   async function changeQuantity() {
     const product = state.filter((item: any) => id == item.product_id);
     if (product[0]?.product_id) {
-      dispatch({
-        type: "IncreaseQuantity",
-        payload: {
-          product_id: product[0]?.product_id,
-          quantity: quantity,
-        },
-      });
       const res = await QuantityChange();
+      console.log("RES : ", res);
+      if (res.status == 200) {
+        console.log("QUantity : ", quantity);
+        dispatch({
+          type: "ChangeQuantity",
+          payload: {
+            product_id: id,
+            quantity: quantity,
+          },
+        });
+      }
+      console.log("state value : ", state);
     }
   }
 
@@ -46,7 +55,6 @@ export const Button = ({ id, quantity, setquantity }: any) => {
       <button
         onClick={() => {
           setquantity((prev: number) => prev - 1);
-          changeQuantity();
         }}
         disabled={quantity <= 1}
         className="border-[1px] border-gray-600 rounded-full h-7 w-7"

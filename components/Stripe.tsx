@@ -13,32 +13,6 @@ const Stripe = () => {
     .NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY as string;
   const stripePromise = loadStripe(publishableKey);
 
-  useEffect(() => {
-    const product = getProductfromStore();
-    fetchFromSanity(product);
-  }, [state]);
-
-  useEffect(() => {
-    fullData();
-  }, [cartdata]);
-
-  function fullData() {
-    const data = cartdata.map((t: any) => ({
-      title: t.title,
-      type: t.type,
-      price: t.price,
-      quantity: state.filter((item: any) => item.product_id == t._id)[0]
-        .quantity,
-    }));
-    console.log("Data :", data);
-    setstripedata(data);
-  }
-  function getProductfromStore() {
-    const product = state.map((item: any) => item.product_id);
-
-    return product;
-  }
-
   const createCheckOutSession = async () => {
     const stripe = await stripePromise;
     fullData();
@@ -58,6 +32,32 @@ const Stripe = () => {
       alert(result.error.message);
     }
   };
+
+  useEffect(() => {
+    const product = getProductfromStore();
+    fetchFromSanity(product);
+  }, [state]);
+
+  useEffect(() => {
+    fullData();
+  }, [cartdata]);
+
+  function fullData() {
+    const data = cartdata.map((t: any) => ({
+      title: t.title,
+      type: t.type,
+      price: t.price,
+      quantity: state.filter((item: any) => item.product_id == t._id)[0]
+        .quantity,
+    }));
+    setstripedata(data);
+  }
+
+  function getProductfromStore() {
+    const product = state.map((item: any) => item.product_id);
+
+    return product;
+  }
 
   async function fetchFromSanity(products: string[]) {
     const productIds = JSON.stringify(products);

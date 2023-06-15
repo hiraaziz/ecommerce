@@ -13,7 +13,7 @@ const AddCart = ({ id }: any) => {
     state.map((t: any) => {
       t.product_id == id ? setcartdisable(true) : setcartdisable(false);
     });
-  }, []);
+  }, [state]);
 
   async function addToCart() {
     const res = await fetch("/api/cart", {
@@ -34,7 +34,6 @@ const AddCart = ({ id }: any) => {
         },
       });
     } else toast.error("Item Added! Failed");
-    console.log(state);
   }
 
   return (

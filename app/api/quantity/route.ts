@@ -19,7 +19,6 @@ export async function PATCH(request: NextRequest) {
         Uproduct_id: cartTable.product_id,
         Uquantity: cartTable.quantity,
       });
-    console.log(res);
 
     return NextResponse.json({ res: res, status: 200 });
   } catch (err) {

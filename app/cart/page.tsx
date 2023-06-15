@@ -21,11 +21,29 @@ type Icart = {
 const Page = () => {
   const { state, dispatch } = useContext(CartContext);
   const [cartdata, setcartdata] = useState<Icart[]>([]);
+  const [productslist, setproductslist] = useState<any>([]);
 
   useEffect(() => {
     const product = getProductfromStore();
     fetchFromSanity(product);
   }, []);
+
+  useEffect(() => {
+    fullData();
+  }, [cartdata]);
+
+  function fullData() {
+    const data = cartdata.map((t: any) => ({
+      id: t._id,
+      title: t.title,
+      type: t.type,
+      price: t.price,
+      images: t.images,
+      quantity: state.filter((item: any) => item.product_id == t._id)[0]
+        .quantity,
+    }));
+    setproductslist(data);
+  }
 
   useEffect(() => {
     const product = getProductfromStore();
@@ -57,6 +75,7 @@ const Page = () => {
     const res = await fetch(`api/cart?id=${id}&userid=${userId}`, {
       method: "DELETE",
     });
+
     if (res.status == 200) {
       dispatch({
         type: "DELETECART",
@@ -78,10 +97,10 @@ const Page = () => {
     <div className="w-full">
       <h1 className="font-bold text-xl m-auto w-fit mt-20">Shopping Cart</h1>
 
-      {state.length !== 0 && cartdata.length > 0 ? (
+      {state.length !== 0 && productslist.length > 0 ? (
         <div className="flex flex-col md:flex-row md:w-4/5 m-auto mt-10">
           <div className="w-[50%] flex-col item-start md:items-center m-auto">
-            {cartdata?.map((item: any) => (
+            {productslist?.map((item: any) => (
               <div
                 key={item._id}
                 className="flex flex-col mt-5 md:flex-row md:items-center md:justify-between md:h-[220px]  md:w-[500px]"
@@ -108,14 +127,13 @@ const Page = () => {
                 </div>
 
                 <div className="flex flex-row items-start justify-evenly md:h-full  md:flex-col md:p-2">
-                  <button onClick={() => deleteCartItem(item._id)}>
+                  <button onClick={() => deleteCartItem(item.id)}>
                     <RiDeleteBin6Line />
                   </button>
 
                   <Button
-                    tquantity={
-                      state.filter((t: any) => t.product_id == item._id)[0]
-                    }
+                    product_id={item.id}
+                    product_quantity={item.quantity}
                   />
                 </div>
                 <Toaster />
