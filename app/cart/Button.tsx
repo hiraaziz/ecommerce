@@ -6,6 +6,7 @@ import Cookies from "universal-cookie";
 export const Button = ({ product_id, product_quantity }: any) => {
   const { state, dispatch } = useContext(CartContext);
   const [quantity, setquantity] = useState(1);
+  const [buttonclick, setbuttonclick] = useState(false);
 
   useEffect(() => {
     changeQuantity();
@@ -31,20 +32,23 @@ export const Button = ({ product_id, product_quantity }: any) => {
   }
 
   async function changeQuantity() {
-    const res = await QuantityChange();
-    if (res.status == 200) {
-      const product = state.filter(
-        (item: any) => product_id == item.product_id
-      );
-      if (product[0]?.product_id) {
-        dispatch({
-          type: "ChangeQuantity",
-          payload: {
-            product_id: product[0]?.product_id,
-            quantity: quantity,
-          },
-        });
+    if (buttonclick == true) {
+      const res = await QuantityChange();
+      if (res.status == 200) {
+        const product = state.filter(
+          (item: any) => product_id == item.product_id
+        );
+        if (product[0]?.product_id) {
+          dispatch({
+            type: "ChangeQuantity",
+            payload: {
+              product_id: product[0]?.product_id,
+              quantity: quantity,
+            },
+          });
+        }
       }
+      setbuttonclick(false);
     }
   }
 
@@ -53,6 +57,7 @@ export const Button = ({ product_id, product_quantity }: any) => {
       <button
         onClick={() => {
           setquantity((prev: number) => prev - 1);
+          setbuttonclick(true);
         }}
         disabled={quantity <= 1}
         className="border-[1px] border-gray-600 rounded-full h-7 w-7"
@@ -63,6 +68,7 @@ export const Button = ({ product_id, product_quantity }: any) => {
       <button
         onClick={() => {
           setquantity((prev: number) => prev + 1);
+          setbuttonclick(true);
         }}
         className="border-[1px] border-gray-600 rounded-full h-7 w-7"
       >

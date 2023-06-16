@@ -38,7 +38,12 @@ const AddCart = ({ id }: any) => {
 
   return (
     <>
-      <Button quantity={quantity} setquantity={setquantity} id={id} />
+      {state.length !== 0 ? (
+        <Button quantity={quantity} setquantity={setquantity} id={id} />
+      ) : (
+        "loading"
+      )}
+
       <button
         onClick={() => addToCart()}
         className="px-4 py-2 bg-black text-white"
@@ -46,6 +51,7 @@ const AddCart = ({ id }: any) => {
       >
         {cartdisbale ? "Added to Cart" : "Add to Cart"}
       </button>
+
       <Toaster />
     </>
   );

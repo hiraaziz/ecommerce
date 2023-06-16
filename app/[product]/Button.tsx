@@ -1,19 +1,21 @@
 "use client";
 import { CartContext } from "@/components/State";
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Cookies from "universal-cookie";
 
 export const Button = ({ id, quantity, setquantity }: any) => {
   const { state, dispatch } = useContext(CartContext);
+  const [buttonclick, setbuttonclick] = useState(false);
 
   useEffect(() => {
     changeQuantity();
   }, [quantity]);
 
   useEffect(() => {
-    const product = state.filter((item: any) => id == item.product_id);
-    if (product[0]) {
-      setquantity(product[0].quantity);
+    const product = state.filter((item: any) => id == item.product_id)[0];
+
+    if (product) {
+      setquantity(product.quantity);
     }
   }, []);
 
@@ -32,21 +34,23 @@ export const Button = ({ id, quantity, setquantity }: any) => {
   }
 
   async function changeQuantity() {
-    const product = state.filter((item: any) => id == item.product_id);
-    if (product[0]?.product_id) {
-      const res = await QuantityChange();
-      console.log("RES : ", res);
-      if (res.status == 200) {
-        console.log("QUantity : ", quantity);
-        dispatch({
-          type: "ChangeQuantity",
-          payload: {
-            product_id: id,
-            quantity: quantity,
-          },
-        });
+    if (buttonclick == true) {
+      const product = state.filter((item: any) => id == item.product_id);
+      if (product[0]?.product_id) {
+        const res = await QuantityChange();
+        console.log("RES : ", res);
+        if (res.status == 200) {
+          console.log("QUantity : ", quantity);
+          dispatch({
+            type: "ChangeQuantity",
+            payload: {
+              product_id: id,
+              quantity: quantity,
+            },
+          });
+        }
       }
-      console.log("state value : ", state);
+      setbuttonclick(false);
     }
   }
 
@@ -55,6 +59,7 @@ export const Button = ({ id, quantity, setquantity }: any) => {
       <button
         onClick={() => {
           setquantity((prev: number) => prev - 1);
+          setbuttonclick(true);
         }}
         disabled={quantity <= 1}
         className="border-[1px] border-gray-600 rounded-full h-7 w-7"
@@ -65,6 +70,7 @@ export const Button = ({ id, quantity, setquantity }: any) => {
       <button
         onClick={() => {
           setquantity((prev: number) => prev + 1);
+          setbuttonclick(true);
         }}
         className="border-[1px] border-gray-600 rounded-full h-7 w-7"
       >
