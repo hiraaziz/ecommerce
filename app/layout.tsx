@@ -2,6 +2,7 @@ import Navbar from "@/components/Navbar";
 import "./globals.css";
 import { Sora } from "next/font/google";
 import StateProvider from "@/components/State";
+import { NextAuthProvider } from "@/components/Provider";
 
 const inter = Sora({ subsets: ["latin"] });
 
@@ -18,10 +19,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <StateProvider>
-          <Navbar />
-          {children}
-        </StateProvider>
+        <NextAuthProvider>
+          <StateProvider>
+            <Navbar />
+            {children}
+          </StateProvider>
+        </NextAuthProvider>
       </body>
     </html>
   );

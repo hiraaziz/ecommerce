@@ -2,11 +2,13 @@
 import { CartContext } from "@/components/State";
 import React, { useState, useContext, useEffect } from "react";
 import Cookies from "universal-cookie";
+import { useSession } from "next-auth/react";
 
 export const Button = ({ product_id, product_quantity }: any) => {
   const { state, dispatch } = useContext(CartContext);
   const [quantity, setquantity] = useState(1);
   const [buttonclick, setbuttonclick] = useState(false);
+  const { data: session } = useSession();
 
   useEffect(() => {
     changeQuantity();
@@ -17,14 +19,14 @@ export const Button = ({ product_id, product_quantity }: any) => {
   }, []);
 
   async function QuantityChange() {
-    const cookies = new Cookies();
-    const userId = cookies.get("user_id");
+    // const cookies = new Cookies();
+    // const userId = cookies.get("user_id");
     const res = await fetch("/api/quantity", {
       method: "PATCH",
       body: JSON.stringify({
         product_id: product_id,
         quantity: quantity,
-        userid: userId,
+        userid: session?.user?.email,
       }),
     });
     const data = await res.json();

@@ -27,10 +27,10 @@ async function Male() {
   const data = await getProdData();
 
   return (
-    <section className=" h-max p-4 md:p-12 flex flex-wrap space-y-6 md:space-y-0 md:space-x-10 justify-center items-center ">
+    <section className=" h-max w-full p-4  flex flex-wrap lg:space-y-6 md:space-y-0 lg:space-x-10 justify-center items-center">
       {data &&
         data.map((maledata: SanityProducts) => (
-          <div className="">
+          <div className="p-4">
             <Link href={maledata._id}>
               <Image
                 src={urlFor(maledata.images[0]).url()}

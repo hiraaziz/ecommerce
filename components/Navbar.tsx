@@ -7,11 +7,14 @@ import { useContext, useEffect, useState } from "react";
 import { CartContext } from "@/components/State";
 import { ICart } from "@/type";
 import { RxHamburgerMenu } from "react-icons/rx";
+import { signIn, signOut } from "next-auth/react";
+import { useSession } from "next-auth/react";
 
 const Navbar = () => {
   const { state, dispatch } = useContext(CartContext);
   const [cartcount, setcartcount] = useState(0);
   const [openNav, setOpenNav] = useState(false);
+  const { data: session } = useSession();
 
   useEffect(() => {
     if (state.length != 0) {
@@ -27,12 +30,13 @@ const Navbar = () => {
 
   useEffect(() => {
     getCart();
-  }, []);
+  }, [session]);
 
   async function getCart() {
-    const cookies = new Cookies();
-    const userId = cookies.get("user_id");
-    const res = await fetch(`/api/cart?userid=${userId}`);
+    // const cookies = new Cookies();
+    // const userId = cookies.get("user_id");
+    // console.log("NAvbar id :", session?.user?.email);
+    const res = await fetch(`/api/cart?userid=${session?.user?.email}`);
     const response: { res: ICart[] } = await res.json();
     if (response.res.length > 0) {
       dispatch({
@@ -41,6 +45,32 @@ const Navbar = () => {
       });
     }
   }
+  const LoginButton = () => {
+    return (
+      <button style={{ marginRight: 10 }} onClick={() => signIn()}>
+        Sign in
+      </button>
+    );
+  };
+  const RegisterButton = () => {
+    return (
+      <Link href="/register" style={{ marginRight: 10 }}>
+        Register
+      </Link>
+    );
+  };
+
+  const LogoutButton = () => {
+    return (
+      <button style={{ marginRight: 10 }} onClick={() => signOut()}>
+        Sign Out
+      </button>
+    );
+  };
+
+  const ProfileButton = () => {
+    return <Link href="/profile">Profile</Link>;
+  };
 
   return (
     <nav>
@@ -66,6 +96,8 @@ const Navbar = () => {
           <input placeholder="What you looking for?" />
         </div>
         <div>
+          {session?.user ? <LogoutButton /> : <LoginButton />}
+          <RegisterButton />
           <Link href="/cart">
             <CiShoppingCart className="w-14 h-14 bg-slate-100 rounded-full p-3" />
             <span className="bg-red-400 w-5 h-4 text-center text-xs absolute  pb-5 -mt-14 ml-[25px] rounded-full text-white ">

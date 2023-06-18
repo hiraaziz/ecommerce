@@ -41,21 +41,21 @@ const Product = async ({ params }: { params: { product: string } }) => {
     <section className="p-10">
       <div className="flex flex-col md:flex-row justify-center w-full space-x-8">
         <Image
-          src={urlFor(data.images[0]).url()}
+          src={urlFor(data?.images[0])?.url()}
           alt="maleimage"
           width={450}
           height={550}
         />
         <div className="flex-col space-y-4 py-4">
-          <h1 className="text-xl font-bold">{data.title}</h1>
-          <p className="font-bold text-gray-400">{data.type}</p>
+          <h1 className="text-xl font-bold">{data?.title}</h1>
+          <p className="font-bold text-gray-400">{data?.type}</p>
 
           {/* Quantity */}
           <label className="font-bold">Quantity</label>
           <br />
           <div className="flex space-x-2 justify-start ">
-            <AddCart id={data._id} />
-            <h2 className="text-xl font-bold self-center">${data.price}</h2>
+            <AddCart id={data?._id} />
+            <h2 className="text-xl font-bold self-center">${data?.price}</h2>
           </div>
         </div>
       </div>
@@ -68,7 +68,7 @@ const Product = async ({ params }: { params: { product: string } }) => {
         <div className="flex flex-col md:flex-row md:justify-between w-full ">
           <h1 className="font-bold text-md text-gray-500">PRODUCT DETAILS</h1>
           <p className="font-regular w-[100%] md:w-[70%] text-justify">
-            {data.description}
+            {data?.description}
           </p>
         </div>
       </div>

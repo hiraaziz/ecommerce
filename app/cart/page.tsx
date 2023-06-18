@@ -9,6 +9,7 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 import OrderSumary from "./OrderSumary";
 import Cookies from "universal-cookie";
 import toast, { Toaster } from "react-hot-toast";
+import { useSession } from "next-auth/react";
 
 type Icart = {
   _id: string;
@@ -22,6 +23,7 @@ const Page = () => {
   const { state, dispatch } = useContext(CartContext);
   const [cartdata, setcartdata] = useState<Icart[]>([]);
   const [productslist, setproductslist] = useState<any>([]);
+  const { data: session } = useSession();
 
   useEffect(() => {
     const product = getProductfromStore();
@@ -70,11 +72,14 @@ const Page = () => {
   }
 
   async function deleteCartItem(id: string) {
-    const cookies = new Cookies();
-    const userId = cookies.get("user_id");
-    const res = await fetch(`api/cart?id=${id}&userid=${userId}`, {
-      method: "DELETE",
-    });
+    // const cookies = new Cookies();
+    // const userId = cookies.get("user_id");
+    const res = await fetch(
+      `api/cart?id=${id}&userid=${session?.user?.email}`,
+      {
+        method: "DELETE",
+      }
+    );
 
     if (res.status == 200) {
       dispatch({

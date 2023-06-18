@@ -6,8 +6,10 @@ import { InferModel, and, eq, sql } from "drizzle-orm";
 
 export async function GET(request: NextRequest) {
   const req = request.nextUrl;
-  const uid = req.searchParams.get("userid") as string;
+  // const req = await request.json();
 
+  const uid = req.searchParams.get("userid") as string;
+  // console.log("Navbar : ", uid);
   if (!uid) {
     return NextResponse.json({ messgae: "Cart is empty" });
   }
@@ -24,13 +26,14 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   const req = await request.json();
-  const uid = uuid();
-  let cookieStore = cookies();
 
-  const uidCookie = cookieStore.get("user_id");
-  if (!uidCookie) {
-    cookieStore.set("user_id", uid);
-  }
+  // const uid = uuid();
+  // let cookieStore = cookies();
+
+  // const uidCookie = cookieStore.get("user_id");
+  // if (!uidCookie) {
+  //   cookieStore.set("user_id", uid);
+  // }
 
   try {
     const res = await db
@@ -38,7 +41,8 @@ export async function POST(request: NextRequest) {
       .values({
         product_id: req.product_id,
         quantity: req.quantity,
-        userid: cookieStore.get("user_id")?.value as string,
+        userid: req.user,
+        // cookieStore.get("user_id")?.value as string,
       })
       .returning();
     return NextResponse.json({ res: res, status: 200 });

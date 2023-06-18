@@ -11,7 +11,7 @@ const HeroSection = () => {
   return (
     <div className="flex">
       {/* Header Content  */}
-      <div className="flex flex-col lg:w-1/2 sm:w-full px-32 gap-10 pt-12">
+      <div className="flex flex-col lg:w-1/2 sm:w-full px-10 lg:px-32 gap-10 pt-12">
         <p className="flex items-center justify-center bg-[#e1edff] rounded-md h-10 w-[120px] font-semibold text-[#0000ff]">
           Sale 70%
         </p>
@@ -33,15 +33,15 @@ const HeroSection = () => {
           </div>
         </Link>
 
-        <div className="flex gap-10 lg:gap-4">
+        <div className="flex flex-col md:flex-row gap-10 lg:gap-4">
           <Image src={Featured1} alt="" />
           <Image src={Featured2} alt="" />
           <Image src={Featured3} alt="" />
           <Image src={Featured4} alt="" />
         </div>
       </div>
-      <div className="sm:hidden lg:flex">
-        <div className=" bg-[#FFECE3] rounded-full absolute w-[550px] h-[550px] top-40"></div>
+      <div className="hidden lg:flex">
+        <div className="hidden lg:block bg-[#FFECE3] rounded-full absolute w-[550px] h-[550px] top-40"></div>
         <Image src={Girl} alt="" className="relative" />
       </div>
     </div>
