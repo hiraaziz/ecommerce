@@ -19,7 +19,7 @@ const AddCart = ({ id }: any) => {
 
   async function addToCart() {
     // First It will add product to cart and If response is okay It will add into store as well
-    const res = await fetch("/api/cart", {
+    const res = await fetch("https://hira-ecommerce.vercel.app/api/cart", {
       method: "POST",
       body: JSON.stringify({
         user: session?.user?.email,
