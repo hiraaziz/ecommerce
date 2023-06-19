@@ -36,7 +36,9 @@ const Navbar = () => {
     // const cookies = new Cookies();
     // const userId = cookies.get("user_id");
     // console.log("NAvbar id :", session?.user?.email);
-    const res = await fetch(`/api/cart?userid=${session?.user?.email}`);
+    const res = await fetch(
+      `https://hira-ecommerce.vercel.app/api/cart?userid=${session?.user?.email}`
+    );
     const response: { res: ICart[] } = await res.json();
     if (response.res.length > 0) {
       dispatch({
