@@ -22,7 +22,7 @@ function urlFor(source: any) {
 }
 
 async function AllProducts() {
-  const data = await getProdData();
+  const data: SanityProducts[] = await getProdData();
 
   return (
     <section className=" h-max w-full p-4  flex flex-wrap  lg:space-x-10 justify-center items-center ">
