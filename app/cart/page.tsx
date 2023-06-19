@@ -75,7 +75,7 @@ const Page = () => {
     // const cookies = new Cookies();
     // const userId = cookies.get("user_id");
     const res = await fetch(
-      `api/cart?id=${id}&userid=${session?.user?.email}`,
+      `https://hira-ecommerce.vercel.app/api/cart?id=${id}&userid=${session?.user?.email}`,
       {
         method: "DELETE",
       }
