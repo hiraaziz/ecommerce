@@ -19,7 +19,7 @@ export const Button = ({ id, quantity, setquantity }: any) => {
     if (product) {
       setquantity(product.quantity);
     }
-  }, []);
+  }, [state]);
 
   async function QuantityChange() {
     // const cookies = new Cookies();
@@ -36,22 +36,22 @@ export const Button = ({ id, quantity, setquantity }: any) => {
   }
 
   async function changeQuantity() {
+    /* On changing quantity everytime this functions will call.
+    1. It will check if buttonclick = true means product already added so change quantity in db and store.
+    2. If buttonclick = false means product is not added so do nothing on quantity change.
+    */
     if (buttonclick == true) {
-      const product = state.filter((item: any) => id == item.product_id);
-      if (product[0]?.product_id) {
-        const res = await QuantityChange();
-        // console.log("RES : ", res);
-        if (res.status == 200) {
-          console.log("QUantity : ", quantity);
-          dispatch({
-            type: "ChangeQuantity",
-            payload: {
-              product_id: id,
-              quantity: quantity,
-            },
-          });
-        }
+      const res = await QuantityChange();
+      if (res.status == 200) {
+        dispatch({
+          type: "ChangeQuantity",
+          payload: {
+            product_id: id,
+            quantity: quantity,
+          },
+        });
       }
+
       setbuttonclick(false);
     }
   }

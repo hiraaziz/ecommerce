@@ -26,15 +26,20 @@ const Page = () => {
   const { data: session } = useSession();
 
   useEffect(() => {
-    const product = getProductfromStore();
-    fetchFromSanity(product);
+    const product = Get_Product_From_Store();
+    Get_Product_From_Sanity(product);
   }, []);
 
   useEffect(() => {
-    fullData();
+    Generate_Data_From_Sanity_Store();
   }, [cartdata]);
 
-  function fullData() {
+  useEffect(() => {
+    const product = Get_Product_From_Store();
+    Get_Product_From_Sanity(product);
+  }, [state]);
+
+  function Generate_Data_From_Sanity_Store() {
     const data = cartdata.map((t: any) => ({
       id: t._id,
       title: t.title,
@@ -47,17 +52,12 @@ const Page = () => {
     setproductslist(data);
   }
 
-  useEffect(() => {
-    const product = getProductfromStore();
-    fetchFromSanity(product);
-  }, [state]);
-
-  function getProductfromStore() {
+  function Get_Product_From_Store() {
     const product = state.map((item: any) => item.product_id);
     return product;
   }
 
-  async function fetchFromSanity(products: string[]) {
+  async function Get_Product_From_Sanity(products: string[]) {
     const productIds = JSON.stringify(products);
     const res = await client.fetch(
       `*[_type=="product" && _id in ${productIds}]{

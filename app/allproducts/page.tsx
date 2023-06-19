@@ -25,10 +25,10 @@ async function AllProducts() {
   const data = await getProdData();
 
   return (
-    <section className=" h-max w-full p-4  flex flex-wrap lg:space-y-6 md:space-y-0 lg:space-x-10 justify-center items-center ">
+    <section className=" h-max w-full p-4  flex flex-wrap  lg:space-x-10 justify-center items-center ">
       {data &&
         data.map((allprod: SanityProducts) => (
-          <div className="p-4">
+          <div className="p-4" key={allprod._id}>
             <Link href={allprod._id}>
               <Image
                 src={urlFor(allprod.images[0]).url()}

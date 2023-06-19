@@ -47,14 +47,26 @@ const Navbar = () => {
   }
   const LoginButton = () => {
     return (
-      <button style={{ marginRight: 10 }} onClick={() => signIn()}>
+      <button
+        style={{ marginRight: 10 }}
+        onClick={() => signIn()}
+        className="bg-transparent hover:bg-blue-500
+      text-black font-semibold hover:text-white py-2 px-4 border border-black
+       hover:border-transparent rounded"
+      >
         Sign in
       </button>
     );
   };
   const RegisterButton = () => {
     return (
-      <Link href="/register" style={{ marginRight: 10 }}>
+      <Link
+        href="/register"
+        style={{ marginRight: 10 }}
+        className="bg-transparent hover:bg-blue-500
+      text-black font-semibold hover:text-white py-2 px-4 border border-black
+       hover:border-transparent rounded"
+      >
         Register
       </Link>
     );
@@ -62,7 +74,13 @@ const Navbar = () => {
 
   const LogoutButton = () => {
     return (
-      <button style={{ marginRight: 10 }} onClick={() => signOut()}>
+      <button
+        style={{ marginRight: 10 }}
+        className="bg-transparent hover:bg-blue-500
+      text-black font-semibold hover:text-white py-2 px-4 border border-black
+       hover:border-transparent rounded"
+        onClick={() => signOut()}
+      >
         Sign Out
       </button>
     );
@@ -95,9 +113,12 @@ const Navbar = () => {
           <CiSearch className="mx-2" />
           <input placeholder="What you looking for?" />
         </div>
+        {/* Login */}
         <div>
           {session?.user ? <LogoutButton /> : <LoginButton />}
           <RegisterButton />
+        </div>
+        <div>
           <Link href="/cart">
             <CiShoppingCart className="w-14 h-14 bg-slate-100 rounded-full p-3" />
             <span className="bg-red-400 w-5 h-4 text-center text-xs absolute  pb-5 -mt-14 ml-[25px] rounded-full text-white ">
@@ -114,7 +135,7 @@ const Navbar = () => {
           height={100}
           className="p-4"
         />
-        <button onClick={() => setOpenNav(!openNav)} className="p-4">
+        <button onClick={() => setOpenNav(!openNav)} className="p-4 ml-4">
           <RxHamburgerMenu />
         </button>
       </div>
@@ -134,7 +155,10 @@ const Navbar = () => {
               <li>All Products</li>
             </Link>
           </div>
-
+          <div>
+            {session?.user ? <LogoutButton /> : <LoginButton />}
+            <RegisterButton />
+          </div>
           <Link href="/cart">
             <CiShoppingCart className="w-14 h-14 bg-slate-100 rounded-full p-3" />
             <span className="bg-red-400 w-5 h-4 text-center text-xs absolute  pb-5 -mt-14 ml-[25px] rounded-full text-white ">

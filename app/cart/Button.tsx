@@ -37,18 +37,13 @@ export const Button = ({ product_id, product_quantity }: any) => {
     if (buttonclick == true) {
       const res = await QuantityChange();
       if (res.status == 200) {
-        const product = state.filter(
-          (item: any) => product_id == item.product_id
-        );
-        if (product[0]?.product_id) {
-          dispatch({
-            type: "ChangeQuantity",
-            payload: {
-              product_id: product[0]?.product_id,
-              quantity: quantity,
-            },
-          });
-        }
+        dispatch({
+          type: "ChangeQuantity",
+          payload: {
+            product_id: product_id,
+            quantity: quantity,
+          },
+        });
       }
       setbuttonclick(false);
     }

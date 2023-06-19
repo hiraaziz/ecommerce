@@ -25,3 +25,22 @@ export async function PATCH(request: NextRequest) {
     return NextResponse.json({ message: "Something went wrong", status: 500 });
   }
 }
+export async function DELETE(request: NextRequest) {
+  const req = request.nextUrl;
+
+  const uid = req.searchParams.get("userid") as string;
+
+  if (!uid) {
+    return NextResponse.json({ messgae: "Cart is empty" });
+  }
+  try {
+    const res = await db
+      .delete(cartTable)
+      .where(and(eq(cartTable.userid, uid)))
+      .returning();
+
+    return NextResponse.json({ res });
+  } catch (err) {
+    return NextResponse.json({ message: "Something went wrong" });
+  }
+}

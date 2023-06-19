@@ -12,12 +12,13 @@ const AddCart = ({ id }: any) => {
   const { data: session } = useSession();
 
   useEffect(() => {
-    state.map((t: any) => {
-      t.product_id == id ? setcartdisable(true) : setcartdisable(false);
-    });
+    // if value product is in the cart set add to cart button disable
+    const val = state.find((t: any) => t.product_id == id);
+    if (val) setcartdisable(true);
   }, [state]);
 
   async function addToCart() {
+    // First It will add product to cart and If response is okay It will add into store as well
     const res = await fetch("/api/cart", {
       method: "POST",
       body: JSON.stringify({
@@ -41,11 +42,7 @@ const AddCart = ({ id }: any) => {
 
   return (
     <>
-      {state.length !== 0 ? (
-        <Button quantity={quantity} setquantity={setquantity} id={id} />
-      ) : (
-        "loading"
-      )}
+      <Button quantity={quantity} setquantity={setquantity} id={id} />
 
       <button
         onClick={() => addToCart()}
@@ -54,7 +51,6 @@ const AddCart = ({ id }: any) => {
       >
         {cartdisbale ? "Added to Cart" : "Add to Cart"}
       </button>
-
       <Toaster />
     </>
   );

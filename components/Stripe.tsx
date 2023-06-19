@@ -9,13 +9,22 @@ const Stripe = () => {
   const [cartdata, setcartdata] = useState([]);
   const [stripedata, setstripedata] = useState<any>([]);
 
+  useEffect(() => {
+    const product = Get_Product_From_Store();
+    Get_Product_From_Sanity(product);
+  }, [state]);
+
+  useEffect(() => {
+    Generate_Data_From_Sanity_Store();
+  }, [cartdata]);
+
   const publishableKey = process.env
     .NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY as string;
   const stripePromise = loadStripe(publishableKey);
 
   const createCheckOutSession = async () => {
     const stripe = await stripePromise;
-    fullData();
+    Generate_Data_From_Sanity_Store();
     const checkoutSession = await fetch("/api/create-stripe-session", {
       method: "POST",
       headers: {
@@ -23,7 +32,6 @@ const Stripe = () => {
       },
       body: JSON.stringify(stripedata),
     });
-
     const sessionID = await checkoutSession.json();
     const result = await stripe?.redirectToCheckout({
       sessionId: sessionID,
@@ -33,16 +41,7 @@ const Stripe = () => {
     }
   };
 
-  useEffect(() => {
-    const product = getProductfromStore();
-    fetchFromSanity(product);
-  }, [state]);
-
-  useEffect(() => {
-    fullData();
-  }, [cartdata]);
-
-  function fullData() {
+  function Generate_Data_From_Sanity_Store() {
     const data = cartdata.map((t: any) => ({
       title: t.title,
       type: t.type,
@@ -53,13 +52,12 @@ const Stripe = () => {
     setstripedata(data);
   }
 
-  function getProductfromStore() {
+  function Get_Product_From_Store() {
     const product = state.map((item: any) => item.product_id);
-
     return product;
   }
 
-  async function fetchFromSanity(products: string[]) {
+  async function Get_Product_From_Sanity(products: string[]) {
     const productIds = JSON.stringify(products);
     const res = await client.fetch(
       `*[_type=="product" && _id in ${productIds}]{
@@ -70,7 +68,6 @@ const Stripe = () => {
         images
       }`
     );
-
     setcartdata(res);
   }
 

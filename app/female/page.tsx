@@ -30,7 +30,7 @@ async function Female() {
     <section className=" h-max w-full p-4  flex flex-wrap  md:space-y-0 lg:space-x-10 justify-center items-center">
       {data &&
         data.map((femaledata: SanityProducts) => (
-          <div className="p-4">
+          <div className="p-4" key={femaledata._id}>
             <Link href={femaledata._id}>
               <Image
                 src={urlFor(femaledata.images[0]).url()}

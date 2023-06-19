@@ -29,12 +29,15 @@ const reducer = (state: any, action: any) => {
         (t: CartItem) => t.product_id !== action.payload.product_id
       );
 
+    case "DONEPAYMENT":
+      return [];
+
     default:
       return state;
   }
 };
 
-export const CartContext = createContext<CartItem | null | any>(null);
+export const CartContext = createContext<any | null>(null);
 
 const StateProvider = ({ children }: { children: React.ReactNode }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
