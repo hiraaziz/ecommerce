@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { SanityProducts } from "@/type";
 
-export const getProdData: () => Promise<SanityProducts[]> = async () => {
+export const getProdData = async () => {
   const res: SanityProducts[] = await client.fetch(`*[_type=="product"]{
     _id,
     images,
