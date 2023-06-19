@@ -24,7 +24,7 @@ export const Button = ({ id, quantity, setquantity }: any) => {
   async function QuantityChange() {
     // const cookies = new Cookies();
     // const userId = cookies.get("user_id");
-    const res = await fetch("/api/quantity", {
+    const res = await fetch("https://hira-ecommerce.vercel.app/api/quantity", {
       method: "PATCH",
       body: JSON.stringify({
         product_id: id,
